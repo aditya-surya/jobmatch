@@ -56,13 +56,19 @@ class NaiveBayes {
             $job_text = $this->preprocessText($job['deskripsi'] . ' ' . $job['persyaratan']);
             $job_keywords = $this->extractKeywords($job_text);
             
-            // Get job category keywords
+            // Get job category keywords using MySQLi
             $stmt = $this->conn->prepare("SELECT keyword, bobot FROM keywords WHERE kategori_id = ?");
-            $stmt->execute([$job['kategori_id']]);
+            $stmt->bind_param("i", $job['kategori_id']);
+            if (!$stmt->execute()) {
+                error_log("Query error (kategori_id): " . $stmt->error);
+                return 0;
+            }
+            $result = $stmt->get_result();
             $category_keywords = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $result->fetch_assoc()) {
                 $category_keywords[$row['keyword']] = $row['bobot'];
             }
+            $stmt->close();
             
             $total_matches = 0;
             $total_weight = 0;
@@ -82,16 +88,17 @@ class NaiveBayes {
                     }
                 }
                 
-                if (!$is_category_match && 
-                    (isset($job_keywords[$keyword]) || strpos($job_text, $keyword) !== false)) {
+                if (!$is_category_match) {
                     $stmt = $this->conn->prepare("SELECT bobot FROM keywords WHERE keyword LIKE ?");
                     $search_keyword = "%{$keyword}%";
-                    $stmt->execute([$search_keyword]);
-                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                    
-                    if ($result) {
-                        $weight = $result['bobot'];
+                    $stmt->bind_param("s", $search_keyword);
+                    if ($stmt->execute()) {
+                        $result = $stmt->get_result();
+                        if ($data = $result->fetch_assoc()) {
+                            $weight = $data['bobot'];
+                        }
                     }
+                    $stmt->close();
                 }
                 
                 $total_matches += $count * $weight;
@@ -123,25 +130,31 @@ class NaiveBayes {
             $processed_cv_text = $this->preprocessText($cv_text, $language);
             $cv_keywords = $this->extractKeywords($processed_cv_text);
             
-            $stmt = $this->conn->query("
+            // Using MySQLi for query
+            $result = $this->conn->query("
                 SELECT l.*, k.nama_kategori 
                 FROM lowongan l 
                 JOIN kategori k ON l.kategori_id = k.id 
+                WHERE l.id > 0
                 ORDER BY l.id DESC
             ");
             
-            $matching_jobs = [];
-            $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$result) {
+                error_log("Query error (lowongan): " . $this->conn->error);
+                return [];
+            }
             
-            foreach ($jobs as $job) {
+            $matching_jobs = [];
+            while ($job = $result->fetch_assoc()) {
                 $match_score = $this->calculateMatchProbability($cv_keywords, $job);
                 $job['match_score'] = $match_score;
                 
-                if ($match_score >= 0.2) { // Lowered threshold since we have few jobs
+                if ($match_score >= 0.2) { // Lowered threshold for testing
                     $matching_jobs[] = $job;
                 }
             }
             
+            // Sort by match score
             usort($matching_jobs, function($a, $b) {
                 return $b['match_score'] <=> $a['match_score'];
             });
