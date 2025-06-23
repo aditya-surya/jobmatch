@@ -1,66 +1,162 @@
 <?php
 class CVParser {
-    /**
-     * Parse CV berdasarkan tipe file
-     */
     public function parseCV($file_path, $file_type) {
-        // SOLUSI TEMPORARY: Untuk demo skripsi, kita akan menggunakan simulasi parsing
-        // Dalam implementasi nyata, Anda perlu menggunakan library yang tepat
-        
-        // Pemeriksaan apakah file ada dan bisa dibaca
-        if (!file_exists($file_path) || !is_readable($file_path)) {
-            error_log("File tidak ditemukan atau tidak bisa dibaca: " . $file_path);
-            return "Error: File tidak ditemukan atau tidak bisa dibaca";
-        }
-        
-        // Cek ukuran file
-        if (filesize($file_path) === 0) {
-            error_log("File kosong: " . $file_path);
-            return "Error: File kosong";
-        }
-        
-        // Logging file yang diupload
-        error_log("Memproses file: " . $file_path . " (Tipe: " . $file_type . ")");
-        
-        // Demo: Ekstrak teks berdasarkan tipe file
-        switch ($file_type) {
-            case 'application/pdf':
-                return $this->simulateParsePDF($file_path);
+        try {
+            error_log("Attempting to parse CV file: $file_path of type: $file_type");
             
-            case 'application/msword': // DOC
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': // DOCX
-                return $this->simulateParseWord($file_path);
+            // Validasi file exists
+            if (!file_exists($file_path)) {
+                error_log("File not found: $file_path");
+                return "Error: File tidak ditemukan.";
+            }
+
+            // Cek ukuran file
+            if (filesize($file_path) === 0) {
+                error_log("File is empty: $file_path");
+                return "Error: File kosong.";
+            }
+
+            $content = '';
             
-            default:
-                // Jika tipe file tidak dikenali, gunakan simulasi default
-                return $this->getSimulatedCVContent();
+            switch ($file_type) {
+                case 'application/pdf':
+                    $content = $this->parsePDF($file_path);
+                    break;
+                    
+                case 'application/msword': // DOC
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': // DOCX
+                    $content = $this->parseWord($file_path);
+                    break;
+                    
+                case 'text/plain': // TXT
+                    $content = $this->parseTXT($file_path);
+                    break;
+                    
+                default:
+                    // Jika tipe file tidak dikenali, gunakan simulasi
+                    error_log("Using simulated content for unsupported file type: $file_type");
+                    return $this->getSimulatedCVContent();
+            }
+            
+            if (empty($content)) {
+                error_log("No content extracted from file");
+                return $this->getSimulatedCVContent(); // Fallback to simulation if extraction fails
+            }
+            
+            // Clean and normalize the content
+            $content = $this->cleanContent($content);
+            
+            error_log("Successfully parsed CV. Content length: " . strlen($content));
+            return $content;
+            
+        } catch (Exception $e) {
+            error_log("Error parsing CV: " . $e->getMessage());
+            return $this->getSimulatedCVContent(); // Fallback to simulation on error
         }
     }
     
-    /**
-     * Simulasi parsing PDF
-     * Dalam implementasi nyata, gunakan library seperti Smalot\PdfParser
-     */
-    private function simulateParsePDF($file_path) {
-        // Dapatkan nama file untuk identifikasi log
-        $filename = basename($file_path);
-        error_log("Simulasi parsing PDF untuk file: " . $filename);
-        
-        // Dapatkan teks simulasi
-        return $this->getSimulatedCVContent();
+    private function parsePDF($file_path) {
+        try {
+            // Mencoba menggunakan pdftotext jika tersedia
+            if ($this->commandExists('pdftotext')) {
+                $output = [];
+                $return_var = 0;
+                exec("pdftotext \"$file_path\" -", $output, $return_var);
+                
+                if ($return_var === 0 && !empty($output)) {
+                    return implode("\n", $output);
+                }
+            }
+            
+            // Jika pdftotext gagal atau tidak tersedia, gunakan simulasi
+            error_log("Using simulated content for PDF: " . basename($file_path));
+            return $this->getSimulatedCVContent();
+            
+        } catch (Exception $e) {
+            error_log("Error parsing PDF: " . $e->getMessage());
+            return $this->getSimulatedCVContent();
+        }
     }
     
-    /**
-     * Simulasi parsing DOC/DOCX
-     * Dalam implementasi nyata, gunakan library seperti PhpOffice\PhpWord
-     */
-    private function simulateParseWord($file_path) {
-        // Dapatkan nama file untuk identifikasi log
-        $filename = basename($file_path);
-        error_log("Simulasi parsing Word untuk file: " . $filename);
+    private function parseWord($file_path) {
+        try {
+            // Untuk DOCX
+            if (class_exists('ZipArchive')) {
+                $zip = new ZipArchive();
+                if ($zip->open($file_path) === true) {
+                    if (($index = $zip->locateName('word/document.xml')) !== false) {
+                        $content = $zip->getFromIndex($index);
+                        $zip->close();
+                        
+                        // Extract text from XML
+                        $content = strip_tags(str_replace('<w:br/>', "\n", $content));
+                        if (!empty($content)) {
+                            return $content;
+                        }
+                    }
+                    $zip->close();
+                }
+            }
+            
+            // Jika gagal atau untuk DOC, gunakan simulasi
+            error_log("Using simulated content for Word document: " . basename($file_path));
+            return $this->getSimulatedCVContent();
+            
+        } catch (Exception $e) {
+            error_log("Error parsing Word document: " . $e->getMessage());
+            return $this->getSimulatedCVContent();
+        }
+    }
+    
+    private function parseTXT($file_path) {
+        try {
+            $content = file_get_contents($file_path);
+            if ($content === false || empty($content)) {
+                throw new Exception("Tidak dapat membaca file teks.");
+            }
+            return $content;
+            
+        } catch (Exception $e) {
+            error_log("Error parsing TXT file: " . $e->getMessage());
+            return $this->getSimulatedCVContent();
+        }
+    }
+    
+    private function cleanContent($content) {
+        // Remove special characters and normalize whitespace
+        $content = preg_replace('/[\x00-\x1F\x7F-\xFF]/', ' ', $content);
+        $content = preg_replace('/\s+/', ' ', $content);
+        $content = trim($content);
         
-        // Dapatkan teks simulasi
-        return $this->getSimulatedCVContent();
+        // Convert to UTF-8 if needed
+        if (!mb_check_encoding($content, 'UTF-8')) {
+            $content = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content));
+        }
+        
+        return $content;
+    }
+    
+    private function commandExists($command) {
+        $whereIsCommand = (PHP_OS == 'WINNT') ? 'where' : 'which';
+        $process = proc_open(
+            "$whereIsCommand $command",
+            [
+                0 => ["pipe", "r"],
+                1 => ["pipe", "w"],
+                2 => ["pipe", "w"]
+            ],
+            $pipes
+        );
+        if ($process !== false) {
+            $stdout = stream_get_contents($pipes[1]);
+            $stderr = stream_get_contents($pipes[2]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($process);
+            
+            return $stdout != '';
+        }
+        return false;
     }
     
     /**
