@@ -1,33 +1,30 @@
 <?php
-session_start();
 require_once 'config/database.php';
 
-// Cek apakah id diberikan
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: results.php");
+// Get job ID from URL
+$job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+try {
+    // Get job details
+    $stmt = $conn->prepare("
+        SELECT l.*, k.nama_kategori 
+        FROM lowongan l 
+        JOIN kategori k ON l.kategori_id = k.id 
+        WHERE l.id = ?
+    ");
+    $stmt->execute([$job_id]);
+    $job = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$job) {
+        header('Location: results.php');
+        exit();
+    }
+
+} catch (Exception $e) {
+    error_log("Error in job_detail: " . $e->getMessage());
+    header('Location: results.php');
     exit();
 }
-
-$job_id = intval($_GET['id']);
-
-// Ambil data lowongan dari database
-$query = "SELECT lowongan.*, kategori.nama_kategori as kategori 
-          FROM lowongan 
-          JOIN kategori ON lowongan.kategori_id = kategori.id 
-          WHERE lowongan.id = ?";
-          
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $job_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    // Lowongan tidak ditemukan
-    header("Location: results.php");
-    exit();
-}
-
-$job = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -37,81 +34,116 @@ $job = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($job['judul']); ?> - JobMatch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/upload.css">
+    <style>
+        .job-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .company-info {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .job-content {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        .match-score {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        .category-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="job-detail-container my-5">
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
-                    <li class="breadcrumb-item"><a href="results.php">Hasil Pencarian</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Detail Lowongan</li>
-                </ol>
-            </nav>
-            
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="h3 mb-0"><?php echo htmlspecialchars($job['judul']); ?></h1>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-8">
-                            <h2 class="h4 company-name"><?php echo htmlspecialchars($job['perusahaan']); ?></h2>
-                            <p class="mb-2"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($job['lokasi']); ?></p>
-                            <p class="mb-0">
-                                <span class="badge bg-primary"><?php echo htmlspecialchars($job['kategori']); ?></span>
-                                <small class="ms-2 text-muted">Sumber: <?php echo htmlspecialchars($job['sumber']); ?></small>
-                                <small class="ms-2 text-muted">Diposting: <?php echo date('d F Y', strtotime($job['tanggal_posting'])); ?></small>
-                            </p>
-                        </div>
-                        <div class="col-md-4 text-md-end">
-                            <?php if (isset($_SESSION["matching_jobs"])): ?>
-                                <?php 
-                                // Cari skor kecocokan dari session jika ada
-                                $match_score = 0;
-                                foreach ($_SESSION["matching_jobs"] as $match_job) {
-                                    if ($match_job['id'] == $job_id) {
-                                        $match_score = $match_job['match_score'];
-                                        break;
-                                    }
-                                }
-                                $match_percent = round($match_score * 100);
-                                ?>
-                                <div class="match-score-big">
-                                    <p class="mb-1">Tingkat Kecocokan</p>
-                                    <div class="progress" style="height: 25px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $match_percent; ?>%;" aria-valuenow="<?php echo $match_percent; ?>" aria-valuemin="0" aria-valuemax="100">
-                                            <strong><?php echo $match_percent; ?>%</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    
+    <div class="job-header">
+        <div class="container">
+            <h1 class="mb-3"><?php echo htmlspecialchars($job['judul']); ?></h1>
+            <div class="d-flex align-items-center flex-wrap gap-3">
+                <span class="match-score">
+                    <i class="fas fa-chart-line me-2"></i>
+                    <?php echo isset($_SESSION['matching_jobs']) ? round($job['match_score'] * 100) : ''; ?>% Match
+                </span>
+                <span class="category-badge">
+                    <?php echo htmlspecialchars($job['nama_kategori']); ?>
+                </span>
+                <span class="category-badge">
+                    <?php echo htmlspecialchars($job['sumber']); ?>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="job-content mb-4">
+                    <h4 class="mb-4">Deskripsi Pekerjaan</h4>
                     <div class="job-description mb-4">
-                        <h3 class="h5 mb-3">Deskripsi Pekerjaan</h3>
-                        <div class="job-description-text">
-                            <?php echo nl2br(htmlspecialchars($job['deskripsi'])); ?>
-                        </div>
+                        <?php echo nl2br(htmlspecialchars($job['deskripsi'])); ?>
+                    </div>
+
+                    <h4 class="mb-4">Persyaratan</h4>
+                    <div class="job-requirements">
+                        <?php echo nl2br(htmlspecialchars($job['persyaratan'])); ?>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="company-info sticky-top" style="top: 2rem;">
+                    <h5 class="mb-4">Informasi Perusahaan</h5>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-building me-2"></i>
+                        <strong>Perusahaan:</strong><br>
+                        <?php echo htmlspecialchars($job['perusahaan']); ?>
                     </div>
                     
-                    <div class="job-requirements mb-4">
-                        <h3 class="h5 mb-3">Persyaratan</h3>
-                        <div class="job-requirements-text">
-                            <?php echo nl2br(htmlspecialchars($job['persyaratan'])); ?>
-                        </div>
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        <strong>Lokasi:</strong><br>
+                        <?php echo htmlspecialchars($job['lokasi']); ?>
                     </div>
                     
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="results.php" class="btn btn-outline-primary">Kembali ke Hasil Pencarian</a>
-                        <button type="button" class="btn btn-success" onclick="alert('Fitur aplikasi belum tersedia dalam demo ini.')">Lamar Sekarang</button>
+                    <div class="mb-4">
+                        <i class="fas fa-calendar me-2"></i>
+                        <strong>Tanggal Posting:</strong><br>
+                        <?php echo date('d M Y', strtotime($job['tanggal_posting'])); ?>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="results.php" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Kembali ke Hasil
+                        </a>
+                        <a href="index.html" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>
+                            Kembali ke Beranda
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
