@@ -3,55 +3,189 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Welcome to JobMatch</title>
+    <title>JobMatch - Sistem Pendukung Keputusan dengan Naive Bayes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-briefcase me-2"></i>
+                JobMatch
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="upload.php">Upload CV</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Tentang</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
     <div class="welcome-container">
-        <h1 class="welcome-title">Selamat Datang di JobMatch</h1>
-        <p class="welcome-description">
-            Temukan pekerjaan impian Anda dengan mudah menggunakan teknologi AI yang canggih. Kami menganalisis CV Anda untuk menemukan lowongan yang paling sesuai dengan keahlian dan pengalaman Anda.
-        </p>
-        <a href="upload.php" class="btn btn-primary cta-button">Mulai Unggah CV</a>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="welcome-title">Temukan Pekerjaan Impian Anda</h1>
+                    <p class="welcome-description">
+                        Sistem Pendukung Keputusan menggunakan metode Naive Bayes untuk mencocokkan CV Anda dengan lowongan pekerjaan yang tersedia.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="upload.php" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-upload me-2"></i>
+                            Upload CV
+                        </a>
+                        <a href="#about" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Pelajari Lebih Lanjut
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <section class="features-section">
+    <!-- Features Section -->
+    <section class="features-section" id="about">
         <div class="container">
-            <h2 class="section-title">Mengapa Memilih JobMatch?</h2>
-            <p class="section-description">Platform pencarian kerja yang menggunakan teknologi AI untuk mencocokkan CV Anda dengan lowongan pekerjaan yang tepat.</p>
+            <h2 class="section-title">Mengapa Menggunakan JobMatch?</h2>
+            <p class="section-description">
+                Kami menggunakan teknologi Machine Learning dengan metode Naive Bayes untuk memberikan hasil yang akurat dalam mencocokkan CV Anda dengan lowongan pekerjaan yang tersedia.
+            </p>
             
             <div class="row mt-5">
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-robot feature-icon"></i>
-                        <h3 class="feature-title">AI Matching</h3>
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="feature-title">Analisis AI</h3>
                         <p class="feature-description">
-                            Teknologi AI canggih yang menganalisis CV Anda dan mencocokkannya dengan ribuan lowongan pekerjaan.
+                            Menggunakan algoritma Naive Bayes untuk menganalisis CV Anda dan mencocokkannya dengan ribuan lowongan pekerjaan.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-bolt feature-icon"></i>
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
                         <h3 class="feature-title">Proses Cepat</h3>
                         <p class="feature-description">
-                            Dapatkan hasil analisis dan rekomendasi pekerjaan dalam hitungan detik.
+                            Dapatkan hasil analisis dan rekomendasi pekerjaan dalam hitungan detik dengan akurasi tinggi.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-bullseye feature-icon"></i>
-                        <h3 class="feature-title">Akurasi Tinggi</h3>
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="feature-title">Hasil Akurat</h3>
                         <p class="feature-description">
-                            Hasil pencarian yang akurat berdasarkan keahlian dan pengalaman Anda.
+                            Rekomendasi pekerjaan yang sesuai dengan keahlian dan pengalaman Anda berdasarkan analisis mendalam.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">Cara Kerja</h2>
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="step-label">Upload CV</div>
+                    <p class="step-description">Upload CV Anda dalam format PDF, DOC, atau DOCX</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="step-label">Analisis</div>
+                    <p class="step-description">Sistem menganalisis CV menggunakan Naive Bayes</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="step-label">Hasil</div>
+                    <p class="step-description">Dapatkan rekomendasi pekerjaan yang sesuai</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <h4 class="mb-3">JobMatch</h4>
+                    <p class="mb-0">Sistem Pendukung Keputusan untuk pencarian kerja menggunakan metode Naive Bayes</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 JobMatch. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
