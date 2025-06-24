@@ -97,21 +97,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Cari lowongan yang cocok
                         $matching_jobs = $naive_bayes->findMatchingJobs($cv_text, $cv_language);
                         
-                        if (!empty($matching_jobs)) {
-                            error_log("Found " . count($matching_jobs) . " matching jobs");
-                            
-                            // Simpan hasil di session
-                            $_SESSION["matching_jobs"] = $matching_jobs;
-                            $_SESSION["cv_file"] = $new_file_name;
-                            $_SESSION["cv_text"] = substr($cv_text, 0, 300) . "...";
-                            
-                            // Redirect ke halaman hasil
-                            header("Location: results.php");
-                            exit();
-                        } else {
-                            $errors[] = "Maaf, tidak ditemukan lowongan yang sesuai dengan CV Anda.";
-                            error_log("No matching jobs found");
-                        }
+                        // Always save results and redirect, even if no matches found
+                        error_log("Found " . count($matching_jobs) . " matching jobs");
+                        
+                        // Simpan hasil di session
+                        $_SESSION["matching_jobs"] = $matching_jobs;
+                        $_SESSION["cv_file"] = $new_file_name;
+                        $_SESSION["cv_text"] = substr($cv_text, 0, 300) . "...";
+                        
+                        // Redirect ke halaman hasil
+                        header("Location: results.php");
+                        exit();
                     } else {
                         $errors[] = "Gagal mengekstrak teks dari CV. Pastikan file tidak rusak.";
                         error_log("Failed to extract text from CV");
