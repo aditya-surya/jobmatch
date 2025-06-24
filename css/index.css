@@ -1,0 +1,99 @@
+/* css/index.css - Styles for the landing/welcome page */
+@import 'common.css';
+
+.welcome-container {
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    color: white;
+}
+
+.welcome-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 1s ease;
+}
+
+.welcome-description {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    max-width: 800px;
+    line-height: 1.6;
+    animation: fadeInUp 1s ease 0.3s both;
+}
+
+.features-section {
+    padding: 5rem 0;
+    background: var(--bg-light);
+}
+
+.feature-card {
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 1rem;
+    animation: fadeIn 1s ease;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.feature-description {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.cta-button {
+    animation: fadeInUp 1s ease 0.6s both;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
