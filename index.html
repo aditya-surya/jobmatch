@@ -4,60 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Welcome to JobMatch</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/upload.css" />
-    <style>
-      .welcome-container {
-        min-height: 80vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 2rem;
-      }
-      .welcome-title {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        color: #1a1a1a;
-      }
-      .welcome-description {
-        font-size: 1.25rem;
-        color: #4a5568;
-        margin-bottom: 2rem;
-        max-width: 600px;
-      }
-      .btn-primary {
-        padding: 12px 40px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        background: linear-gradient(90deg, #218da1 0%, #02287e 100%) !important;
-        border: none !important;
-        transition: all 0.3s ease;
-      }
-      .btn-primary:hover {
-        background: linear-gradient(90deg, #1a7f93 0%, #011d6b 100%) !important;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(2, 40, 126, 0.3);
-      }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
-    <div class="container welcome-container">
+    <div class="welcome-container">
         <h1 class="welcome-title">Selamat Datang di JobMatch</h1>
         <p class="welcome-description">
-            Unggah CV Anda dan temukan lowongan pekerjaan yang paling sesuai dengan keahlian dan pengalaman Anda.
+            Temukan pekerjaan impian Anda dengan mudah menggunakan teknologi AI yang canggih. Kami menganalisis CV Anda untuk menemukan lowongan yang paling sesuai dengan keahlian dan pengalaman Anda.
         </p>
-        <a href="upload.php" class="btn btn-primary">Mulai Unggah CV</a>
+        <a href="upload.php" class="btn btn-primary cta-button">Mulai Unggah CV</a>
     </div>
+
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Mengapa Memilih JobMatch?</h2>
+            <p class="section-description">Platform pencarian kerja yang menggunakan teknologi AI untuk mencocokkan CV Anda dengan lowongan pekerjaan yang tepat.</p>
+            
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-robot feature-icon"></i>
+                        <h3 class="feature-title">AI Matching</h3>
+                        <p class="feature-description">
+                            Teknologi AI canggih yang menganalisis CV Anda dan mencocokkannya dengan ribuan lowongan pekerjaan.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <h3 class="feature-title">Proses Cepat</h3>
+                        <p class="feature-description">
+                            Dapatkan hasil analisis dan rekomendasi pekerjaan dalam hitungan detik.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-bullseye feature-icon"></i>
+                        <h3 class="feature-title">Akurasi Tinggi</h3>
+                        <p class="feature-description">
+                            Hasil pencarian yang akurat berdasarkan keahlian dan pengalaman Anda.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
