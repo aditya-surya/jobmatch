@@ -46,12 +46,9 @@
             <!-- Upload Form -->
             <div class="card upload-form">
                 <div class="card-body">
-                    <div class="upload-icon-wrapper">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
                     
                     <p class="card-text">
-                        Unggah CV Anda dalam format PDF, DOC, atau DOCX. Sistem AI kami akan menganalisis CV Anda menggunakan metode Naive Bayes untuk menemukan lowongan kerja yang paling sesuai.
+                        Unggah CV Anda dalam format PDF, DOC, atau DOCX. Kami akan menganalisis CV Anda menggunakan metode Naive Bayes untuk menemukan lowongan kerja yang paling sesuai.
                     </p>
                     
                     <form action="process_cv.php" method="post" enctype="multipart/form-data" id="uploadForm">
