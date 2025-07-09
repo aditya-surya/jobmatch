@@ -7,6 +7,14 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 ini_set('error_log', 'debug.log');
 
+// Load Composer autoloader for PDF parser
+if (file_exists('vendor/autoload.php')) {
+    require_once 'vendor/autoload.php';
+    error_log("Composer autoloader loaded successfully");
+} else {
+    error_log("Warning: Composer autoloader not found");
+}
+
 // Check upload directory
 $upload_dir = "uploads/";
 if (!file_exists($upload_dir)) {
@@ -27,6 +35,7 @@ try {
     require_once 'config/database.php';
     require_once 'classes/CVParser.php';
     require_once 'classes/NaiveBayes.php';
+    require_once 'classes/OCRHelper.php';
 } catch (Exception $e) {
     error_log("Error loading required files: " . $e->getMessage());
     die("System initialization error: " . $e->getMessage());
