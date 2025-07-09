@@ -124,7 +124,43 @@ try {
                         Persyaratan
                     </h3>
                     <div class="job-content">
-                        <?php echo nl2br(htmlspecialchars($job['persyaratan'])); ?>
+                        <?php
+                        // Format persyaratan menjadi list bullet yang rapi
+                        $req = $job['persyaratan'];
+                        $req = str_replace(["\r", "\\n"], "\n", $req); // Ganti literal \n dan carriage return ke newline
+                        // Jika hanya satu baris tapi mengandung banyak '- ', pecah berdasarkan '- '
+                        if (substr_count($req, '- ') > 1 && substr_count($req, "\n") < 1) {
+                            $lines = preg_split('/- /', $req);
+                            $list_items = [];
+                            foreach ($lines as $line) {
+                                $line = trim($line);
+                                if ($line === '' || strtolower($line) === 'persyaratan') continue;
+                                $list_items[] = htmlspecialchars($line);
+                            }
+                        } else {
+                            $lines = preg_split('/\n|<br\s*\/?>/', $req);
+                            $list_items = [];
+                            foreach ($lines as $line) {
+                                $line = trim($line);
+                                if ($line === '' || strtolower($line) === 'persyaratan') continue;
+                                if (strpos($line, '- ') === 0) {
+                                    $line = substr($line, 2);
+                                }
+                                $list_items[] = htmlspecialchars($line);
+                            }
+                        }
+                        // Tampilkan sebagai list jika ada lebih dari satu item
+                        $list_items = array_filter($list_items, function($v) { return $v !== ''; });
+                        if (count($list_items) > 0) {
+                            echo '<ul class="mb-0">';
+                            foreach ($list_items as $item) {
+                                echo '<li>' . $item . '</li>';
+                            }
+                            echo '</ul>';
+                        } else {
+                            echo nl2br(htmlspecialchars($req));
+                        }
+                        ?>
                     </div>
                 </div>
 
