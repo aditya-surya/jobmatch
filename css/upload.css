@@ -1,0 +1,469 @@
+/* css/upload.css - Styles for the CV upload page */
+@import 'common.css';
+
+body {
+    background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                url('https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover fixed;
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.upload-container {
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Header Styles */
+.navbar-brand {
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.navbar-brand i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin: 1.5rem 0 2.5rem;
+    text-align: center;
+    animation: fadeInDown 1s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Progress Steps Style Enhancement */
+.progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem auto 3rem;
+    padding: 0;
+    max-width: 700px;
+    position: relative;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    z-index: 1;
+    text-align: center;
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    color: white;
+    font-size: 0.85rem;
+    opacity: 0.95;
+    margin-top: 0.5rem;
+}
+
+/* Garis penghubung antar step */
+.step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 30px;
+    right: -50%;
+    width: calc(100% - 30px); /* Kurangi panjang garis */
+    height: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 0;
+}
+
+.step:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    top: 30px;
+    left: -50%;
+    width: calc(100% - 30px); /* Kurangi panjang garis */
+    height: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 0;
+}
+
+.step.active .step-icon {
+    background: var(--gradient-primary);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+}
+
+/* Upload Form */
+.upload-form {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    padding: 3rem !important;
+    animation: slideUp 0.8s ease;
+}
+
+.upload-icon-wrapper {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-icon-wrapper i {
+    font-size: 4rem;
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: bounce 2s infinite;
+}
+
+.card-text {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Upload Area */
+.upload-area {
+    border: 2px dashed #e2e8f0;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    background: #f8fafc;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+    border-color: var(--primary-color);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.upload-area.drag-over {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.15);
+}
+
+.upload-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.upload-icon-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-icon-circle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.1);
+    animation: pulseLight 2s infinite;
+}
+
+.upload-content i {
+    font-size: 4rem;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover .upload-content i {
+    transform: translateY(-5px);
+}
+
+.upload-text {
+    text-align: center;
+}
+
+.upload-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    display: block;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.form-text {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* Selected File */
+.selected-file {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e5e7eb;
+    animation: fadeIn 0.3s ease;
+}
+
+.selected-file-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.file-icon {
+    font-size: 1.75rem;
+    color: var(--primary-color);
+}
+
+.file-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.1rem;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    line-height: 1;
+    font-size: 1.25rem;
+}
+
+.btn-remove:hover {
+    background-color: #fee2e2;
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary, .btn-outline-secondary {
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    height: 3.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-radius: 14px;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    border: none;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #e2e8f0;
+    background: white;
+}
+
+.btn-outline-secondary:hover {
+    background: #f8fafc;
+    transform: translateY(-2px);
+}
+
+/* Error States */
+.invalid-feedback {
+    color: #ef4444;
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+    text-align: left;
+    display: block;
+}
+
+.is-invalid {
+    border-color: #ef4444 !important;
+}
+
+/* Loading States */
+#loadingSpinner {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Animations */
+@keyframes pulseLight {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.5;
+    }
+    70% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 0.5;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    body {
+        padding: 1.5rem 0;
+    }
+
+    .upload-container {
+        padding: 0 1rem;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        margin: 1rem 0 2rem;
+    }
+
+    .upload-form {
+        padding: 2rem !important;
+        border-radius: 20px;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .progress-steps {
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+
+    .step-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .step::before {
+        top: 20px;
+    }
+
+    .step-label {
+        font-size: 0.8rem;
+    }
+
+    .upload-area {
+        padding: 2rem 1rem;
+    }
+
+    .upload-icon-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .upload-content i {
+        font-size: 3rem;
+    }
+
+    .upload-label {
+        font-size: 1rem;
+    }
+
+    .btn-primary, .btn-outline-secondary {
+        font-size: 1rem;
+        height: 3.25rem;
+        border-radius: 12px;
+    }
+}
