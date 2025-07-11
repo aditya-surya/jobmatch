@@ -6,51 +6,151 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Arial', sans-serif; /* Menggunakan font yang sama */
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Background yang sama */
     min-height: 100vh;
     color: #333;
 }
 
 .admin-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background: #fff;
+    width: 100%; /* Full width */
+    max-width: 100%; /* Full width */
+    margin: 0; /* Tanpa margin samping */
+    background: #ffffff;
     min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 0; /* Tanpa border-radius di container utama */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Header */
 .admin-header {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
     color: white;
-    padding: 2rem;
-    text-align: center;
-    border-radius: 8px 8px 0 0;
+    padding: 2rem 2.5rem 2rem 2.5rem;
+    border-radius: 0;
+    min-height: 90px;
+    box-sizing: border-box;
+    box-shadow: 0 6px 32px 0 rgba(37,99,235,0.10);
 }
 
-.admin-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 300;
+.header-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.admin-header h1 i {
-    margin-right: 0.5rem;
-    color: #3498db;
+.header-left h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.admin-header p {
-    font-size: 1.1rem;
+.header-left h1 i {
+    color: #ffdd57;
+    font-size: 2.2rem;
+}
+
+.header-left p {
+    font-size: 1.05rem;
     opacity: 0.9;
+    margin: 0;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header-nav .nav-link {
+    color: #2563eb;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50px;
+    border: 2px solid #2563eb;
+    padding: 0.6rem 1.5rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    transition: all 0.18s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(2px);
+}
+
+.header-nav .nav-link.active,
+.header-nav .nav-link:hover {
+    background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+    color: #fff;
+    border-color: #2563eb;
+    box-shadow: 0 6px 24px rgba(37,99,235,0.18);
+    outline: 2px solid #ffdd57;
+}
+
+.header-nav .nav-link:active {
+    outline: 2.5px solid #f59e0b;
+}
+
+.header-nav .nav-link i {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem 1rem;
+        gap: 1.2rem;
+    }
+    .header-nav {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+    .header-left h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem 0.5rem;
+        gap: 0.7rem;
+    }
+    .header-nav {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0.5rem;
+    }
+    .header-nav .nav-link {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.98rem;
+    }
+    .header-left h1 {
+        font-size: 1.1rem;
+    }
 }
 
 /* Navigation */
 .admin-nav {
-    background: #ecf0f1;
+    background: #f8f9fa; /* Warna nav yang sama */
     padding: 1rem 2rem;
-    border-bottom: 1px solid #bdc3c7;
+    border-bottom: 1px solid #e0e0e0;
     display: flex;
     gap: 1rem;
 }
@@ -61,25 +161,31 @@ body {
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     text-decoration: none;
-    color: #2c3e50;
+    color: #4a69bd; /* Warna link nav yang sama */
     border-radius: 8px;
     transition: all 0.3s ease;
     font-weight: 500;
 }
 
 .nav-link:hover {
-    background: #d5dbdb;
+    background: #e9ecef;
     transform: translateY(-2px);
 }
 
 .nav-link.active {
-    background: #3498db;
+    background: #4a69bd; /* Warna aktif yang sama */
     color: white;
 }
 
 /* Main Content */
 .admin-main {
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 32px;
+    min-height: 80vh;
+    background: linear-gradient(120deg, #f8fafc 60%, #e0e7ef 100%);
 }
 
 /* Section Header */
@@ -93,14 +199,14 @@ body {
 }
 
 .section-header h2 {
-    color: #2c3e50;
+    color: #4a69bd; /* Warna judul section yang sama */
     font-size: 1.8rem;
     font-weight: 600;
 }
 
 .section-header h2 i {
     margin-right: 0.5rem;
-    color: #3498db;
+    color: #ffdd57; /* Warna ikon yang sama */
 }
 
 /* Search and Filter */
@@ -125,12 +231,13 @@ body {
     border-radius: 8px;
     font-size: 0.9rem;
     transition: border-color 0.3s ease;
+    width: 250px; /* Lebar input yang sama */
 }
 
 .search-input:focus,
 .filter-select:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: #4a69bd; /* Warna border focus yang sama */
 }
 
 /* Buttons */
@@ -151,18 +258,18 @@ body {
 }
 
 .btn-primary {
-    background: #3498db;
+    background: #4a69bd; /* Warna primary button yang sama */
     color: white;
 }
 
 .btn-primary:hover {
-    background: #2980b9;
+    background: #3b5a9a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 4px 12px rgba(74, 105, 189, 0.3);
 }
 
 .btn-secondary {
-    background: #95a5a6;
+    background: #95a5a6; /* Warna secondary button yang sama */
     color: white;
 }
 
@@ -172,7 +279,7 @@ body {
 }
 
 .btn-edit {
-    background: #f39c12;
+    background: #f39c12; /* Warna edit button yang sama */
     color: white;
     padding: 0.5rem;
     border-radius: 6px;
@@ -184,7 +291,7 @@ body {
 }
 
 .btn-delete {
-    background: #e74c3c;
+    background: #e74c3c; /* Warna delete button yang sama */
     color: white;
     padding: 0.5rem;
     border-radius: 6px;
@@ -202,37 +309,47 @@ body {
 
 /* Table */
 .table-container {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 2rem auto;
+    overflow-x: auto;
+    background: rgba(255,255,255,0.92);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(37,99,235,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid #e0e7ef;
 }
 
 .data-table {
     width: 100%;
+    min-width: 900px;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.97rem;
+    background: transparent;
 }
 
 .data-table th {
-    background: #34495e;
-    color: white;
-    padding: 1rem;
+    background: #2563eb;
+    color: #fff;
+    padding: 1.1rem 1rem;
     text-align: left;
-    font-weight: 600;
-    font-size: 0.85rem;
+    font-weight: 700;
+    font-size: 0.93rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border: none;
 }
 
 .data-table td {
-    padding: 1rem;
-    border-bottom: 1px solid #ecf0f1;
+    padding: 1.1rem 1rem;
+    border-bottom: 1px solid #e0e7ef;
     vertical-align: middle;
+    background: transparent;
 }
 
 .data-table tr:hover {
-    background: #f8f9fa;
+    background: rgba(37,99,235,0.04);
+    transition: background 0.18s;
 }
 
 .data-table tr:last-child td {
@@ -241,16 +358,23 @@ body {
 
 .job-title {
     font-weight: 600;
-    color: #2c3e50;
+    color: #4a69bd; /* Warna judul pekerjaan yang sama */
 }
 
 .category-badge {
-    background: #3498db;
-    color: white;
-    padding: 0.25rem 0.75rem;
+    background: #2563eb;
+    color: #fff;
+    padding: 0.32rem 1.2rem;
     border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+    min-width: 160px;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .action-buttons {
@@ -261,14 +385,17 @@ body {
 
 /* Form */
 .form-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
     background: white;
-    border-radius: 12px;
+    border-radius: 12px; /* Border-radius form yang sama */
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .admin-form {
-    max-width: 800px;
+    max-width: 800px; /* Lebar form yang sama */
 }
 
 .form-row {
@@ -286,7 +413,7 @@ body {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: #4a69bd; /* Warna label form yang sama */
     font-size: 0.9rem;
 }
 
@@ -306,8 +433,8 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: #4a69bd; /* Warna border focus yang sama */
+    box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.1);
 }
 
 .form-group textarea {
@@ -383,7 +510,7 @@ body {
 }
 
 .modal-header {
-    background: #e74c3c;
+    background: #e74c3c; /* Warna header modal yang sama */
     color: white;
     padding: 1.5rem;
     border-radius: 12px 12px 0 0;
@@ -424,7 +551,7 @@ body {
 }
 
 .btn-danger {
-    background: #e74c3c;
+    background: #e74c3c; /* Warna danger button yang sama */
     color: white;
 }
 
@@ -443,33 +570,92 @@ body {
 .pagination {
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 2rem 0 1.2rem 0;
+    flex-wrap: wrap;
 }
 
 .pagination .btn {
-    margin: 0 0.5rem;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.7rem;
+    border-radius: 50px;
+    background: #fff;
+    color: #4a69bd;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1.2px solid #e0e0e0;
+    box-shadow: 0 1px 4px rgba(74,105,189,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s cubic-bezier(.42,0,.58,1.0);
+    cursor: pointer;
+    margin: 0 1.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.pagination .btn:hover {
+    background: #4a69bd;
+    color: #fff;
+    border-color: #4a69bd;
+    box-shadow: 0 2px 8px rgba(74,105,189,0.13);
+    transform: translateY(-1px) scale(1.04);
+}
+
+.pagination .btn.btn-primary,
+.pagination .btn.active {
+    background: #4a69bd;
+    color: #fff;
+    border-color: #4a69bd;
+    box-shadow: 0 2px 8px rgba(74,105,189,0.13);
+    z-index: 2;
+    transform: scale(1.08);
+}
+
+.pagination .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f1f1f1;
+    color: #b0b0b0;
+    border-color: #e0e0e0;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 900px) {
+    .table-container {
+        max-width: 100vw;
+    }
+    .data-table {
+        min-width: 700px;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagination {
+        gap: 0.1rem;
+        margin: 1rem 0 0.5rem 0;
+    }
+    .pagination .btn {
+        min-width: 26px;
+        height: 26px;
+        font-size: 0.85rem;
+        padding: 0 0.5rem;
+    }
+    .table-container {
+        max-width: 100vw;
+        border-radius: 10px;
+    }
+    .data-table {
+        min-width: 500px;
+    }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .admin-container {
-        margin: 0;
-        border-radius: 0;
-    }
-    
-    .admin-header {
-        padding: 1.5rem 1rem;
-    }
-    
-    .admin-header h1 {
-        font-size: 2rem;
-    }
-    
-    .admin-nav {
-        padding: 1rem;
-        flex-direction: column;
-    }
-    
     .admin-main {
         padding: 1rem;
     }
