@@ -328,7 +328,8 @@ if ($action == 'edit' && isset($_GET['id'])) {
                                 <label for="kategori_id">Kategori *</label>
                                 <select id="kategori_id" name="kategori_id" required>
                                     <option value="">Pilih Kategori</option>
-                                    <?php foreach ($categories as $cat): ?>
+                                    <?php foreach (
+                                        $categories as $cat): ?>
                                         <option value="<?php echo $cat['id']; ?>"
                                                 <?php echo ($edit_lowongan && $edit_lowongan['kategori_id'] == $cat['id']) ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($cat['nama_kategori']); ?>
@@ -338,9 +339,25 @@ if ($action == 'edit' && isset($_GET['id'])) {
                             </div>
                             <div class="form-group">
                                 <label for="lokasi">Lokasi *</label>
-                                <input type="text" id="lokasi" name="lokasi" required
-                                       value="<?php echo $edit_lowongan ? htmlspecialchars($edit_lowongan['lokasi']) : ''; ?>"
-                                       placeholder="Contoh: Jakarta, Bandung, Surabaya">
+                                <select id="lokasi" name="lokasi" required>
+                                    <option value="">Pilih Lokasi</option>
+                                    <?php
+                                    $daftar_lokasi = [
+                                        'Tangerang', 'Serang', 'Cilegon', 'Pandeglang', 'Lebak',
+                                        'Rangkasbitung', 'BSD', 'Ciputat', 'Tigaraksa', 'Balaraja',
+                                        'Cikupa', 'Ciledug', 'Cisauk', 'Curug', 'Karawaci',
+                                        'Pamulang', 'Cipondoh', 'Cilegon', 'Anyer', 'Mauk',
+                                        'Gunung Kaler', 'Sepatan', 'Muncang', 'Bayah', 'Cisoka',
+                                        'Cisata', 'Cibadak', 'Cibaliung', 'Cikeusik', 'Cigemblong',
+                                        'BSD City', 'BSD', 'Pondok Aren', 'Setu', 'Legok',
+                                    ];
+                                    $selected_lokasi = $edit_lowongan ? $edit_lowongan['lokasi'] : '';
+                                    foreach ($daftar_lokasi as $lokasi) {
+                                        $selected = ($selected_lokasi === $lokasi) ? 'selected' : '';
+                                        echo "<option value=\"$lokasi\" $selected>$lokasi</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
 
