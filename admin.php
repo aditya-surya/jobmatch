@@ -254,6 +254,10 @@ if ($action == 'edit' && isset($_GET['id'])) {
                                         <td><?php echo date('d/m/Y', strtotime($lowongan['tanggal_posting'])); ?></td>
                                         <td>
                                             <div class="action-buttons">
+                                                <a href="job_detail.php?id=<?php echo $lowongan['id']; ?>&from=admin" 
+                                                   class="btn btn-sm btn-detail" title="Lihat Detail">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
                                                 <a href="?action=edit&id=<?php echo $lowongan['id']; ?>" 
                                                    class="btn btn-sm btn-edit" title="Edit">
                                                     <i class="fas fa-edit"></i>
@@ -293,15 +297,16 @@ if ($action == 'edit' && isset($_GET['id'])) {
                 </div>
 
             <?php elseif ($action == 'add' || $action == 'edit'): ?>
-                <!-- Add/Edit Form -->
-                <div class="section-header">
-                    <h2>
-                        <i class="fas fa-<?php echo $action == 'add' ? 'plus' : 'edit'; ?>"></i>
-                        <?php echo $action == 'add' ? 'Tambah Lowongan Baru' : 'Edit Lowongan'; ?>
-                    </h2>
-                </div>
-
                 <div class="form-container">
+                    <div class="form-title-section">
+                        <h2 style="font-weight:700;font-size:2.1rem;color:#2563eb;margin-bottom:0.5rem;">
+                            <i class="fas fa-plus-circle me-2" style="color:#2563eb;"></i>
+                            <?php echo $action == 'add' ? 'Tambah Lowongan Baru' : 'Edit Lowongan'; ?>
+                        </h2>
+                        <div style="color:#64748b;font-size:1.08rem;margin-bottom:1.5rem;">
+                            <?php echo $action == 'add' ? 'Isi informasi lowongan pekerjaan yang akan ditambahkan' : 'Perbarui informasi lowongan pekerjaan'; ?>
+                        </div>
+                    </div>
                     <form method="POST" action="" class="admin-form">
                         <input type="hidden" name="action" value="<?php echo $action; ?>">
                         <?php if ($action == 'edit' && $edit_lowongan): ?>
