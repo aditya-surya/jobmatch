@@ -139,15 +139,15 @@ try {
                             }
                         } else {
                             $lines = preg_split('/\n|<br\s*\/?>/', $req);
-                            $list_items = [];
-                            foreach ($lines as $line) {
-                                $line = trim($line);
+                        $list_items = [];
+                        foreach ($lines as $line) {
+                            $line = trim($line);
                                 if ($line === '' || strtolower($line) === 'persyaratan') continue;
-                                if (strpos($line, '- ') === 0) {
-                                    $line = substr($line, 2);
-                                }
-                                $list_items[] = htmlspecialchars($line);
+                            if (strpos($line, '- ') === 0) {
+                                $line = substr($line, 2);
                             }
+                            $list_items[] = htmlspecialchars($line);
+                        }
                         }
                         // Tampilkan sebagai list jika ada lebih dari satu item
                         $list_items = array_filter($list_items, function($v) { return $v !== ''; });
@@ -165,16 +165,24 @@ try {
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button class="btn btn-primary btn-custom" onclick="showNotification()">
-                        <i class="fas fa-external-link-alt me-2"></i>
-                        Lihat di Web
-                    </button>
-                    <a href="results.php" class="btn btn-outline-primary btn-custom">
-                        <i class="fas fa-arrow-left me-2"></i>
-                        Kembali ke Hasil
-                    </a>
-                </div>
+                <?php if (isset($_GET['from']) && $_GET['from'] === 'admin'): ?>
+                    <div class="text-center mt-4">
+                        <a href="admin.php?action=list" class="btn btn-primary d-inline-flex align-items-center gap-2">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a>
+                    </div>
+                <?php elseif (!isset($_GET['from']) || $_GET['from'] !== 'admin'): ?>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-custom" onclick="showNotification()">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            Lihat di Web
+                        </button>
+                        <a href="results.php" class="btn btn-outline-primary btn-custom">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Kembali ke Hasil
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
