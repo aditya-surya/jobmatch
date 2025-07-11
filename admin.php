@@ -131,9 +131,19 @@ while ($row = $result->fetch_assoc()) {
 
 // Count total listings for pagination
 $total_query = "SELECT COUNT(*) as total FROM lowongan l $where_clause";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
-$total_items = $total_row['total'];
+if (!empty($params)) {
+    $stmt_total = $conn->prepare($total_query);
+    $stmt_total->bind_param($types, ...$params);
+    $stmt_total->execute();
+    $total_result = $stmt_total->get_result();
+    $total_row = $total_result->fetch_assoc();
+    $total_items = $total_row['total'];
+    $stmt_total->close();
+} else {
+    $total_result = $conn->query($total_query);
+    $total_row = $total_result->fetch_assoc();
+    $total_items = $total_row['total'];
+}
 $total_pages = ceil($total_items / $items_per_page);
 
 // Get single lowongan for edit
@@ -161,8 +171,18 @@ if ($action == 'edit' && isset($_GET['id'])) {
 <body>
     <div class="admin-container">
         <header class="admin-header">
-            <h1><i class="fas fa-briefcase"></i> Admin Panel JobMatch</h1>
-            <p>Kelola Data Lowongan Pekerjaan</p>
+            <div class="header-left">
+                <h1><i class="fas fa-briefcase"></i> Admin Panel JobMatch</h1>
+                <p>Kelola Data Lowongan Pekerjaan</p>
+            </div>
+            <nav class="header-nav">
+                <a href="?action=list" class="nav-link <?php echo $action == 'list' ? 'active' : ''; ?>">
+                    <i class="fas fa-list"></i> Daftar Lowongan
+                </a>
+                <a href="?action=add" class="nav-link <?php echo $action == 'add' ? 'active' : ''; ?>">
+                    <i class="fas fa-plus"></i> Tambah Lowongan
+                </a>
+            </nav>
         </header>
 
         <?php if ($message): ?>
@@ -170,15 +190,6 @@ if ($action == 'edit' && isset($_GET['id'])) {
                 <i class="fas fa-check-circle"></i> <?php echo $message; ?>
             </div>
         <?php endif; ?>
-
-        <nav class="admin-nav">
-            <a href="?action=list" class="nav-link <?php echo $action == 'list' ? 'active' : ''; ?>">
-                <i class="fas fa-list"></i> Daftar Lowongan
-            </a>
-            <a href="?action=add" class="nav-link <?php echo $action == 'add' ? 'active' : ''; ?>">
-                <i class="fas fa-plus"></i> Tambah Lowongan
-            </a>
-        </nav>
 
         <main class="admin-main">
             <?php if ($action == 'list'): ?>
@@ -189,12 +200,12 @@ if ($action == 'edit' && isset($_GET['id'])) {
                         <form method="GET" action="" class="search-form">
                             <input type="hidden" name="action" value="list">
                             <input type="text" name="search" placeholder="Cari judul, perusahaan, atau lokasi..." 
-                                   value="<?php echo htmlspecialchars($search); ?>" class="search-input">
+                                   value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" class="search-input">
                             <select name="kategori" class="filter-select">
                                 <option value="">Semua Kategori</option>
                                 <?php foreach ($categories as $cat): ?>
                                     <option value="<?php echo $cat['id']; ?>" 
-                                            <?php echo $kategori_filter == $cat['id'] ? 'selected' : ''; ?>>
+                                            <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == $cat['id']) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($cat['nama_kategori']); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -263,17 +274,21 @@ if ($action == 'edit' && isset($_GET['id'])) {
                 <!-- Pagination Links -->
                 <div class="pagination">
                     <?php if ($current_page > 1): ?>
-                        <a href="?action=list&page=<?php echo $current_page - 1; ?>" class="btn btn-secondary">Previous</a>
+                        <a href="?action=list&page=<?php echo $current_page - 1; ?>" class="btn btn-secondary" title="Sebelumnya">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
                     <?php endif; ?>
 
                     <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <a href="?action=list&page=<?php echo $i; ?>" class="btn <?php echo $i == $current_page ? 'btn-primary' : 'btn-secondary'; ?>">
+                        <a href="?action=list&page=<?php echo $i; ?>" class="btn <?php echo $i == $current_page ? 'btn-primary active' : 'btn-secondary'; ?>">
                             <?php echo $i; ?>
                         </a>
                     <?php endfor; ?>
 
                     <?php if ($current_page < $total_pages): ?>
-                        <a href="?action=list&page=<?php echo $current_page + 1; ?>" class="btn btn-secondary">Next</a>
+                        <a href="?action=list&page=<?php echo $current_page + 1; ?>" class="btn btn-secondary" title="Berikutnya">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
                     <?php endif; ?>
                 </div>
 
@@ -363,13 +378,13 @@ if ($action == 'edit' && isset($_GET['id'])) {
                         </div>
 
                         <div class="form-actions">
+                            <a href="?action=list" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i>
                                 <?php echo $action == 'add' ? 'Simpan Lowongan' : 'Update Lowongan'; ?>
                             </button>
-                            <a href="?action=list" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Kembali
-                            </a>
                         </div>
                     </form>
                 </div>
